@@ -31,7 +31,7 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 	}
 	defer func() {
 		if err := file.Close(); err != nil {
-			log.Println("Ошибка при закрытии файла:", err)
+			log.Println("Failed to close file: ", err)
 		}
 	}()
 
@@ -61,7 +61,7 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 	}
 	defer func() {
 		if err := outFile.Close(); err != nil {
-			log.Println("Ошибка при закрытии файла:", err)
+			log.Println("ОFailed to close file: ", err)
 		}
 	}()
 
