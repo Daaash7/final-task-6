@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -13,7 +14,8 @@ import (
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "../index.html")
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	http.ServeFile(w, r, "index.html")
 }
 
 func Upload(w http.ResponseWriter, r *http.Request) {
@@ -27,7 +29,11 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	defer file.Close()
+	defer func() {
+		if err := file.Close(); err != nil {
+			log.Println("Ошибка при закрытии файла:", err)
+		}
+	}()
 
 	data, err := io.ReadAll(file)
 	if err != nil {
@@ -53,7 +59,11 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	defer outFile.Close()
+	defer func() {
+		if err := outFile.Close(); err != nil {
+			log.Println("Ошибка при закрытии файла:", err)
+		}
+	}()
 
 	_, err = outFile.WriteString(result)
 	if err != nil {
@@ -61,7 +71,7 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.Header().Set("Content-Type", "text/plane; charset=utf-8")
 	_, _ = w.Write([]byte(result))
 
 }
