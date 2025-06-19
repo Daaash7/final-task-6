@@ -17,7 +17,6 @@ type Server struct {
 func NewServer(logger *log.Logger) *Server {
 	r := chi.NewRouter()
 
-	// Регистрируем обработчики
 	r.Get("/", handlers.Index)
 	r.Post("/upload", handlers.Upload)
 
